@@ -1,0 +1,62 @@
+import express from 'express';
+import 'express-async-errors';
+import cookieSession from 'cookie-session';
+import { currentUserRouter } from './routes/users/current-user';
+import { NotFoundError, errorHandler, currentUser } from './common';
+import { signupRouter } from './routes/users/signup';
+import { signinRouter } from './routes/users/signin';
+import { signoutRouter } from './routes/users/signout';
+import { confirmationRouter } from './routes/users/confirmation';
+import * as dotenv from 'dotenv';
+import { indexFinancesRouter } from './routes/finances';
+import { updateUserRouter } from './routes/finances/update';
+dotenv.config();
+import cors from 'cors';
+import { outgoingsNewRouter } from './routes/finances/outgoings/new';
+import { deleteOutgoingRouter } from './routes/finances/outgoings/delete';
+import { updateDutgoingRouter } from './routes/finances/outgoings/update';
+import { getOutgoingsRouter } from './routes/finances/outgoings';
+
+const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+// ingress nginx will be sending requests via proxy default behaviour is to reject
+// app.set('trust proxy', true);
+
+app.use(express.json());
+
+//the code below means that you have to put https:// in your post requests!
+app.use(
+  cookieSession({
+    signed: false,
+    secure: false, //require https if we are in prod
+  })
+);
+
+app.use(currentUserRouter);
+app.use(signinRouter);
+app.use(signoutRouter);
+app.use(signupRouter);
+app.use(confirmationRouter);
+app.use(currentUser);
+app.use(indexFinancesRouter);
+app.use(updateUserRouter);
+app.use(outgoingsNewRouter)
+app.use(deleteOutgoingRouter)
+app.use(updateDutgoingRouter)
+app.use(getOutgoingsRouter)
+
+//not found 404
+app.all('*', async (req, res) => {
+  throw new NotFoundError();
+});
+
+app.use(errorHandler);
+
+export { app };
