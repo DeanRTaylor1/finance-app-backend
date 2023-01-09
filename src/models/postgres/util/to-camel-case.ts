@@ -1,10 +1,11 @@
+import { OutgoingRecord, UserProps } from "../../../common/Types/types-interfaces";
 
 
 
-const toCamelCase = (rows: any[]) => {
+const toCamelCase = (rows: UserProps[] | OutgoingRecord[]) => {
   console.log(rows)
   return rows.map((row: any) => {
-    const replaced  = {} as any;
+    const replaced = {} as any;
 
     for (let key in row) {
       const camelCase = key.replace(/([-_][a-z])/gi, ($1) =>

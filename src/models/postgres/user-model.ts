@@ -1,9 +1,12 @@
 import { UserProps } from '../../common/Types/types-interfaces';
 import pool from '../../pool';
+import { tables } from './util/tables';
 import toCamelCase from './util/to-camel-case';
 
 
 class User {
+  private static table = tables.users;
+
   static async find() {
     const { rows } = await pool.query(`SELECT * FROM users;`);
     const parsedRows = toCamelCase(rows);

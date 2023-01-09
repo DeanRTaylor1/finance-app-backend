@@ -8,13 +8,17 @@ const router = express.Router();
 
 router.get('/api/finances/outgoings', requireAuth, async (req: Request, res: Response) => {
 
-  const { email } = req.headers;
-  console.log(email)
+  const { email, page } = req.headers;
+  console.log(email, page)
+  if (!email || !page || isNaN(+page)) {
+    return new BadRequestError('Missing Paramaters')
+  }
 
-  if(typeof email !== 'string'){
+  if (typeof email !== 'string') {
     throw new BadRequestError('Details not provided')
   }
-  const items = await Outgoings.getRecordsByUser(email)
+  //first page should be page 1
+  const items = await Outgoings.getRecordsByUser(email, +page)
 
   console.log(items)
 

@@ -1,5 +1,8 @@
 
 type UserProps = {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   email: string;
   monthlySalary: number;
   username: string;
@@ -20,7 +23,21 @@ type OutgoingRecord = {
 };
 
 
+type ExpenseProps = {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  item: string;
+  cost: number;
+  currency: string;
+  tag: string;
+  dateSpent: Date;
+  userId: number;
+};
+
 export type {
   UserProps,
-  OutgoingRecord
+  OutgoingRecord,
+  ExpenseProps
+  
 }

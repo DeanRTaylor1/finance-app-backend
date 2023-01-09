@@ -5,7 +5,6 @@ import { Outgoings } from '../../../models/postgres/outgoings-model';
 import { User } from '../../../models/postgres/user-model';
 
 const router = express.Router();
-/* TODO add user-model integration  */
 
 router.post(
   '/api/finances/outgoings',
@@ -14,7 +13,7 @@ router.post(
     const { item, currency, email, tag, cost } = req.body;
 
     if (!currency || !email || !tag || !cost || !item) {
-      throw new BadRequestError('Missing attribute`')
+      throw new BadRequestError('Missing Attributes')
     }
     const existingItem = await Outgoings.findExistingItemByName(item)
 
@@ -33,7 +32,7 @@ router.post(
     const outgoings = await Outgoings.findAll()
     console.log(outgoings)
 
-    res.send(addedItem);
+    res.status(201).send(addedItem);
   }
 );
 

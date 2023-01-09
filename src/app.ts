@@ -16,6 +16,9 @@ import { outgoingsNewRouter } from './routes/finances/outgoings/new';
 import { deleteOutgoingRouter } from './routes/finances/outgoings/delete';
 import { updateDutgoingRouter } from './routes/finances/outgoings/update';
 import { getOutgoingsRouter } from './routes/finances/outgoings';
+import { expensesIndexRouter } from './routes/finances/expenses';
+import { expensesNewRouter } from './routes/finances/expenses/new';
+import { deleteExpenseRouter } from './routes/finances/expenses/delete';
 
 const app = express();
 
@@ -47,10 +50,13 @@ app.use(confirmationRouter);
 app.use(currentUser);
 app.use(indexFinancesRouter);
 app.use(updateUserRouter);
-app.use(outgoingsNewRouter)
-app.use(deleteOutgoingRouter)
-app.use(updateDutgoingRouter)
-app.use(getOutgoingsRouter)
+app.use(outgoingsNewRouter);
+app.use(deleteOutgoingRouter);
+app.use(updateDutgoingRouter);
+app.use(getOutgoingsRouter);
+app.use(expensesIndexRouter);
+app.use(expensesNewRouter);
+app.use(deleteExpenseRouter)
 
 //not found 404
 app.all('*', async (req, res) => {
