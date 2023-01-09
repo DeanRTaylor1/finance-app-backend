@@ -15,7 +15,7 @@ router.post(
     //remove the postgres id from the return as it is unused
     delete userData.id
 
-    res.send(userData);
+    res.status(200).send(userData);
   }
 );
 

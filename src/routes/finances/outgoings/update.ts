@@ -17,7 +17,7 @@ router.put('/api/finances/outgoings', requireAuth, async (req: Request, res: Res
     throw new BadRequestError('Item does not exist')
   }
 
-  res.send([existingItem])
+  res.status(200).send([existingItem])
 
 })
 

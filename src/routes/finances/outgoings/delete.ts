@@ -12,16 +12,16 @@ router.delete('/api/finances/outgoings', requireAuth, async (req: Request, res: 
   console.log(item, userid)
 
   if (!userid || typeof item !== 'string' || typeof +userid !== 'number') {
-    throw new BadRequestError('Details for deletion not provided')
+    throw new BadRequestError('Missing Parameters')
   }
 
   const existingItem = await Outgoings.findExistingItemByName(item)
   if (!existingItem) {
     throw new BadRequestError('Item does not exist')
   }
-  await Outgoings.deleteOutgoingRecords(item, +userid)
+  await Outgoings.deleteOutgoingRecords(item, +userid);
 
-  res.send([{ message: 'Removed Item Successfully' }])
+  res.status(200).send([{ message: 'Removed Item Successfully' }]);
 
 })
 

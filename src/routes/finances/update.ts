@@ -33,7 +33,7 @@ router.post(
       savingsTarget
     });
 
-    res.send({
+    res.status(201).send({
       email: response.email,
       monthlySalary: response.monthlySalary,
       currency: response.currency,
