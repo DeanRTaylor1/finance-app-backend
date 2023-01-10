@@ -79,6 +79,29 @@ class Outgoings {
     return toCamelCase(rows);
   }
 
+  static async countRecordsByUser(userId: number) {
+    const { rows } = await pool.query(
+      `	SELECT tag, COUNT(*) AS count
+        FROM fixed_outgoings_monthly  
+        WHERE user_id = $1
+      	GROUP BY tag
+      	ORDER BY count DESC;
+
+    `, [userId]
+    )
+    return toCamelCase(rows)
+  }
+
+  static async sumRecordsByUser(userId: number) {
+    const { rows } = await pool.query(
+      `	SELECT SUM(cost) AS total_outgoings        
+	      FROM fixed_outgoings_monthly
+        WHERE user_id = $1;
+      `, [userId]
+    )
+    return toCamelCase(rows)[0]
+  }
+
 
 }
 

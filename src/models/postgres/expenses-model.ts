@@ -42,7 +42,7 @@ class Expenses {
     )
     return toCamelCase(rows);
   }
-  static async getExpenseCountByUser(userid: string) {
+  static async getExpenseCountByUser(userid: number) {
     const { rows } = await pool.query(`
       SELECT COUNT(id) FROM ${this.table} WHERE user_id = $1;`
       , [userid]
@@ -50,6 +50,17 @@ class Expenses {
     return toCamelCase(rows)[0];
   }
 
+  static async getExpensesInWithinDates(userid: number, startDate: string, endDate: string) {
+    const { rows } = await pool.query(
+      `SELECT cost, date_spent, item, tag, id 
+       FROM ${this.table} 
+       WHERE user_id = $1
+       AND date_spent
+       BETWEEN $2 AND $3;`,
+      [userid, startDate, endDate]
+    )
+    return toCamelCase(rows)
+  }
 
   /* TODO ADD UPDATE AND DELETE QUERIES
   static async count() {
