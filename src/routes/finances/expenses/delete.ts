@@ -6,19 +6,19 @@ import { User } from '../../../models/postgres/user-model';
 const router = express.Router();
 
 router.delete('/api/finances/expenses', requireAuth, async (req: Request, res: Response) => {
-  const { userid, item, dateSpent } = req.headers;
+  const { userid, item, datespent } = req.headers;
 
-  if (!userid || !item || !dateSpent) {
+  if (!userid || !item || !datespent) {
     throw new BadRequestError('Missing Attributes');
   }
 
   // const { id } = await User.findByEmail(email);
 
-  if (isNaN(+userid) || typeof item !== 'string' || typeof dateSpent !== 'string') {
+  if (isNaN(+userid) || typeof item !== 'string' || typeof datespent !== 'string') {
     throw new BadRequestError('Missing Paramaters')
   }
 
-  const response = await Expenses.deleteExpenseRecord(item, +userid, dateSpent);
+  const response = await Expenses.deleteExpenseRecord(item, +userid, datespent);
 
 
   res.status(200).send(response)

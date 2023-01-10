@@ -19,6 +19,7 @@ import { getOutgoingsRouter } from './routes/finances/outgoings';
 import { expensesIndexRouter } from './routes/finances/expenses';
 import { expensesNewRouter } from './routes/finances/expenses/new';
 import { deleteExpenseRouter } from './routes/finances/expenses/delete';
+import { expenseCountRouter } from './routes/finances/expenses/count';
 
 const app = express();
 
@@ -56,7 +57,9 @@ app.use(updateDutgoingRouter);
 app.use(getOutgoingsRouter);
 app.use(expensesIndexRouter);
 app.use(expensesNewRouter);
-app.use(deleteExpenseRouter)
+app.use(deleteExpenseRouter);
+app.use(expenseCountRouter);
+
 
 //not found 404
 app.all('*', async (req, res) => {

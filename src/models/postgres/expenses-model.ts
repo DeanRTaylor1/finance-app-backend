@@ -38,9 +38,16 @@ class Expenses {
   }
   static async deleteExpenseRecord(item: string, userId: number, date: string) {
     const { rows } = await pool.query(
-      `DELETE FROM ${this.table} WHERE item = $1 AND user_id = $2 AND date_spent = $3 RETURNING *`, [item, userId, date]
+      `DELETE FROM ${this.table} WHERE item = $1 AND user_id = $2 AND date_spent = $3 RETURNING *;`, [item, userId, date]
     )
-    return toCamelCase(rows)
+    return toCamelCase(rows);
+  }
+  static async getExpenseCountByUser(userid: string) {
+    const { rows } = await pool.query(`
+      SELECT COUNT(id) FROM ${this.table} WHERE user_id = $1;`
+      , [userid]
+    )
+    return toCamelCase(rows)[0];
   }
 
 

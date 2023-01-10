@@ -3,7 +3,7 @@ import { OutgoingRecord, UserProps } from "../../../common/Types/types-interface
 
 
 const toCamelCase = (rows: UserProps[] | OutgoingRecord[]) => {
-  console.log(rows)
+  //console.log(rows)
   return rows.map((row: any) => {
     const replaced = {} as any;
 
