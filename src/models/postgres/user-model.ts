@@ -45,6 +45,17 @@ class User {
     );
     return toCamelCase(rows)[0];
   }
+
+  static async deleteUserByEmail(email: string) {
+    const { rows } = await pool.query(
+      `DELETE FROM ${this.table}
+      WHERE email = $1
+      RETURNING *;
+      `,
+      [email]
+    )
+    return toCamelCase(rows)
+  }
 }
 
 export { User };

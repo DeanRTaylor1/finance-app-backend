@@ -21,6 +21,7 @@ import { expensesNewRouter } from './routes/finances/expenses/new';
 import { deleteExpenseRouter } from './routes/finances/expenses/delete';
 import { expenseCountRouter } from './routes/finances/expenses/count';
 import { dashboardDataValuesRouter } from './routes/finances/outgoings/dashboard';
+import { deleteAccountRouter } from './routes/users/delete';
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use(expensesNewRouter);
 app.use(deleteExpenseRouter);
 app.use(expenseCountRouter);
 app.use(dashboardDataValuesRouter)
+app.use(deleteAccountRouter)
 
 //not found 404
 app.all('*', async (req, res) => {

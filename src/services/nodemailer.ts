@@ -64,7 +64,7 @@ export class confirmationEmailHandler {
             </p>
             <a
               class="h-12"
-              href="finance-planner.dev/auth/confirm/${userid}"
+              href="${process.env.CLIENT_URL}auth/confirm/${userid}"
               style="text-decoration: underline; font-weight: 800; height: 1.5rem"
               >link</a
             >

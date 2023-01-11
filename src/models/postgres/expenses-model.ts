@@ -62,6 +62,16 @@ class Expenses {
     return toCamelCase(rows)
   }
 
+  static async sumRecordsByUser(userId: number) {
+    const { rows } = await pool.query(
+      `	SELECT SUM(cost) AS total_expenses        
+	      FROM ${this.table}
+        WHERE user_id = $1;
+      `, [userId]
+    )
+    return toCamelCase(rows)[0]
+  }
+
   /* TODO ADD UPDATE AND DELETE QUERIES
   static async count() {
     const { rows } = await pool.query(`SELECT COUNT(*) FROM users`);

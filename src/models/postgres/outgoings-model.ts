@@ -102,6 +102,7 @@ class Outgoings {
     return toCamelCase(rows)[0]
   }
 
+  
 
 }
 
