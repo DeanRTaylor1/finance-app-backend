@@ -1,13 +1,13 @@
 const nodemailer = require('nodemailer');
 import * as dotenv from 'dotenv';
-dotenv.config()
+dotenv.config();
 
 export class confirmationEmailHandler {
   protected static transport = nodemailer.createTransport({
     service: 'Outlook',
     auth: {
-      user: 'deanrtaylor@hotmail.com',
-      pass: process.env.NODEMAIL_PASS 
+      user: process.env.NODEMAIL_EMAIL,
+      pass: process.env.NODEMAIL_PASS,
     },
   });
 
@@ -18,7 +18,7 @@ export class confirmationEmailHandler {
   ) {
     this.transport.sendMail(
       {
-        from: 'deanrtaylor@hotmail.com',
+        from: process.env.NODEMAIL_EMAIL,
         to: email,
         subject: 'Please confirm your MyFin Account',
         html: `<div

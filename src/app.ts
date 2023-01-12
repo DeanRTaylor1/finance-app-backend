@@ -61,8 +61,8 @@ app.use(expensesIndexRouter);
 app.use(expensesNewRouter);
 app.use(deleteExpenseRouter);
 app.use(expenseCountRouter);
-app.use(dashboardDataValuesRouter)
-app.use(deleteAccountRouter)
+app.use(dashboardDataValuesRouter);
+app.use(deleteAccountRouter);
 
 //not found 404
 app.all('*', async (req, res) => {

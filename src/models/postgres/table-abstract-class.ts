@@ -1,8 +1,7 @@
-import { tables } from './util/tables'
-
+import { tables } from './util/tables';
 
 abstract class table {
-  abstract  table: typeof tables;
+  abstract table: typeof tables;
 }
 
-export {table}
+export { table };

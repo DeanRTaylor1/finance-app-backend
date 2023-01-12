@@ -3,7 +3,6 @@ import pool from '../../pool';
 import { tables } from './util/tables';
 import toCamelCase from './util/to-camel-case';
 
-
 class User {
   private static table = tables.users;
 
@@ -41,7 +40,13 @@ class User {
        updated_at = current_timestamp
        WHERE email = $5
        RETURNING *;`,
-      [user.monthlySalary, user.currency, user.phone, user.savingsTarget, user.email]
+      [
+        user.monthlySalary,
+        user.currency,
+        user.phone,
+        user.savingsTarget,
+        user.email,
+      ]
     );
     return toCamelCase(rows)[0];
   }
@@ -53,8 +58,8 @@ class User {
       RETURNING *;
       `,
       [email]
-    )
-    return toCamelCase(rows)
+    );
+    return toCamelCase(rows);
   }
 }
 

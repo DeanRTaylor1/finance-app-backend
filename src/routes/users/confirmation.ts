@@ -1,10 +1,8 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../../models/mongoose/User';
-import  initPgUser  from "../../services/new-user-postgres";
+import initPgUser from '../../services/new-user-postgres';
 import { BadRequestError } from '../../common';
-
-
 
 const router = express.Router();
 
@@ -21,8 +19,7 @@ router.put('/api/users/confirmation', async (req: Request, res: Response) => {
   //   email: user.email,
   //   username: user.username,
   // });
-  await initPgUser(user.email, user.username)
-  
+  await initPgUser(user.email, user.username);
 
   const userJwt = jwt.sign(
     { id: user.id, username: user.username, email: user.email },

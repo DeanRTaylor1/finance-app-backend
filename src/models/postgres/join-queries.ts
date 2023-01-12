@@ -1,10 +1,6 @@
-
 import pool from '../../pool';
 import { tables } from './util/tables';
 import toCamelCase from './util/to-camel-case';
-
-
-
 
 class JoinQueries {
   static async getTotalCostByTagsByUserid(userid: number) {
@@ -23,12 +19,9 @@ class JoinQueries {
           ) AS total_costs_all
           GROUP BY tag`,
       [userid]
-    )
-    return toCamelCase(rows)
+    );
+    return toCamelCase(rows);
   }
-
-
 }
 
 export { JoinQueries };
-

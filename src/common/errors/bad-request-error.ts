@@ -1,6 +1,5 @@
 import { CustomError } from './custom-error';
 
-
 //Generic error
 
 export class BadRequestError extends CustomError {
@@ -10,7 +9,7 @@ export class BadRequestError extends CustomError {
     Object.setPrototypeOf(this, BadRequestError.prototype);
   }
   serializeErrors() {
-    console.log(this.message)
+    console.log(this.message);
     return [{ message: this.message }];
   }
 }

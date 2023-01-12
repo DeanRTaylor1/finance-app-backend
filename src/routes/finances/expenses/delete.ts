@@ -5,23 +5,34 @@ import { User } from '../../../models/postgres/user-model';
 
 const router = express.Router();
 
-router.delete('/api/finances/expenses', requireAuth, async (req: Request, res: Response) => {
-  const { userid, item, datespent } = req.headers;
+router.delete(
+  '/api/finances/expenses',
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const { userid, item, datespent } = req.headers;
 
-  if (!userid || !item || !datespent) {
-    throw new BadRequestError('Missing Attributes');
+    if (!userid || !item || !datespent) {
+      throw new BadRequestError('Missing Attributes');
+    }
+
+    // const { id } = await User.findByEmail(email);
+
+    if (
+      isNaN(+userid) ||
+      typeof item !== 'string' ||
+      typeof datespent !== 'string'
+    ) {
+      throw new BadRequestError('Missing Paramaters');
+    }
+
+    const response = await Expenses.deleteExpenseRecord(
+      item,
+      +userid,
+      datespent
+    );
+
+    res.status(200).send(response);
   }
+);
 
-  // const { id } = await User.findByEmail(email);
-
-  if (isNaN(+userid) || typeof item !== 'string' || typeof datespent !== 'string') {
-    throw new BadRequestError('Missing Paramaters')
-  }
-
-  const response = await Expenses.deleteExpenseRecord(item, +userid, datespent);
-
-
-  res.status(200).send(response)
-})
-
-export { router as deleteExpenseRouter }
+export { router as deleteExpenseRouter };

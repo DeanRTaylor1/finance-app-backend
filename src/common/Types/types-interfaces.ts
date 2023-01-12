@@ -1,4 +1,3 @@
-
 type UserProps = {
   id?: number;
   createdAt?: Date;
@@ -12,16 +11,15 @@ type UserProps = {
 };
 
 type OutgoingRecord = {
-    id:        number;
-    createdAt: Date;
-    updatedAt: Date;
-    item:      string;
-    currency:  string;
-    userId:    number;
-    tag:       string;
-    cost:      number;
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  item: string;
+  currency: string;
+  userId: number;
+  tag: string;
+  cost: number;
 };
-
 
 type ExpenseProps = {
   id?: number;
@@ -35,9 +33,4 @@ type ExpenseProps = {
   userId: number;
 };
 
-export type {
-  UserProps,
-  OutgoingRecord,
-  ExpenseProps
-  
-}
+export type { UserProps, OutgoingRecord, ExpenseProps };

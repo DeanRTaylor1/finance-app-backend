@@ -13,7 +13,7 @@ router.post(
     const userData = await User.findByEmail(email);
 
     //remove the postgres id from the return as it is unused
-    delete userData.id
+    delete userData.id;
 
     res.status(200).send(userData);
   }

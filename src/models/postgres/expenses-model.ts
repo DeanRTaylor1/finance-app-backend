@@ -3,32 +3,42 @@ import pool from '../../pool';
 import { tables } from './util/tables';
 import toCamelCase from './util/to-camel-case';
 
-
-
-
 class Expenses {
   private static table = tables.expenses;
 
   static async findAll(userId: number, page: number) {
     const offset = (page - 1) * 10;
-    console.log(offset)
-    const { rows } = await pool.query(`SELECT * FROM ${this.table} LIMIT 10 OFFSET ${offset};`);
+    console.log(offset);
+    const { rows } = await pool.query(
+      `SELECT * FROM ${this.table} LIMIT 10 OFFSET ${offset};`
+    );
     const parsedRows = toCamelCase(rows);
     return parsedRows;
   }
   static async findAllByUserId(userId: number) {
-    const { rows } = await pool.query(`SELECT * FROM ${this.table} WHERE email = $1;`, [
-      userId,
-    ]);
+    const { rows } = await pool.query(
+      `SELECT * FROM ${this.table} WHERE email = $1;`,
+      [userId]
+    );
     return toCamelCase(rows)[0];
   }
   static async findItemByName(item: string, userId: number) {
-    const { rows } = await pool.query(`
+    const { rows } = await pool.query(
+      `
         SELECT * FROM ${this.table} WHERE item = $1 AND user_id = $2
-      `, [item, userId])
+      `,
+      [item, userId]
+    );
     return toCamelCase(rows);
   }
-  static async insertNewExpense(item: string, cost: number, currency: string, tag: string, dateSpent: Date, userId: number) {
+  static async insertNewExpense(
+    item: string,
+    cost: number,
+    currency: string,
+    tag: string,
+    dateSpent: Date,
+    userId: number
+  ) {
     const { rows } = await pool.query(
       `INSERT INTO ${this.table}(item, cost, currency, tag, date_spent, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
       [item, cost, currency, tag, dateSpent, userId]
@@ -38,19 +48,25 @@ class Expenses {
   }
   static async deleteExpenseRecord(item: string, userId: number, date: string) {
     const { rows } = await pool.query(
-      `DELETE FROM ${this.table} WHERE item = $1 AND user_id = $2 AND date_spent = $3 RETURNING *;`, [item, userId, date]
-    )
+      `DELETE FROM ${this.table} WHERE item = $1 AND user_id = $2 AND date_spent = $3 RETURNING *;`,
+      [item, userId, date]
+    );
     return toCamelCase(rows);
   }
   static async getExpenseCountByUser(userid: number) {
-    const { rows } = await pool.query(`
-      SELECT COUNT(id) FROM ${this.table} WHERE user_id = $1;`
-      , [userid]
-    )
+    const { rows } = await pool.query(
+      `
+      SELECT COUNT(id) FROM ${this.table} WHERE user_id = $1;`,
+      [userid]
+    );
     return toCamelCase(rows)[0];
   }
 
-  static async getExpensesInWithinDates(userid: number, startDate: string, endDate: string) {
+  static async getExpensesInWithinDates(
+    userid: number,
+    startDate: string,
+    endDate: string
+  ) {
     const { rows } = await pool.query(
       `SELECT cost, date_spent, item, tag, id 
        FROM ${this.table} 
@@ -58,8 +74,8 @@ class Expenses {
        AND date_spent
        BETWEEN $2 AND $3;`,
       [userid, startDate, endDate]
-    )
-    return toCamelCase(rows)
+    );
+    return toCamelCase(rows);
   }
 
   static async sumRecordsByUser(userId: number) {
@@ -67,9 +83,10 @@ class Expenses {
       `	SELECT SUM(cost) AS total_expenses        
 	      FROM ${this.table}
         WHERE user_id = $1;
-      `, [userId]
-    )
-    return toCamelCase(rows)[0]
+      `,
+      [userId]
+    );
+    return toCamelCase(rows)[0];
   }
 
   /* TODO ADD UPDATE AND DELETE QUERIES

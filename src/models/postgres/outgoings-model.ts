@@ -1,10 +1,7 @@
-
 import pool from '../../pool';
 import { User } from './user-model';
 import { tables } from './util/tables';
 import toCamelCase from './util/to-camel-case';
-
-
 
 /* TODO IMPLEMENT POSTGRES ABSTRACT CLASS FOR BASIC METHODS */
 
@@ -18,38 +15,48 @@ class Outgoings {
   }
 
   static async findExistingItemByName(item: string) {
-    const { rows } = await pool.query(`SELECT * FROM ${this.table} WHERE item = $1;`, [item]);
-    console.log(rows)
-    return toCamelCase(rows)[0]
+    const { rows } = await pool.query(
+      `SELECT * FROM ${this.table} WHERE item = $1;`,
+      [item]
+    );
+    console.log(rows);
+    return toCamelCase(rows)[0];
   }
 
-
-  static async insertNewRecord(item: string, currency: string, userId: number, tag: string, cost: number) {
+  static async insertNewRecord(
+    item: string,
+    currency: string,
+    userId: number,
+    tag: string,
+    cost: number
+  ) {
     const { rows } = await pool.query(
       `INSERT INTO ${this.table} (item, currency, user_id, tag, cost)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING *;`,
       [item, currency, userId, tag, cost]
-    )
+    );
 
-    return toCamelCase(rows)[0]
+    return toCamelCase(rows)[0];
   }
-
 
   static async deleteOutgoingRecords(item: string, userId: number) {
     const { rows } = await pool.query(
       `DELETE FROM ${this.table} WHERE user_id = $1 AND item = $2 RETURNING *;`,
       [userId, item]
-    )
-    return toCamelCase(rows)[0]
-
+    );
+    return toCamelCase(rows)[0];
   }
 
-  static async updateExistingRecord(email: string, item: string, currency: string, tag: string, cost: number) {
-
-    const { id } = await User.findByEmail(email)
-    console.log(id)
-
+  static async updateExistingRecord(
+    email: string,
+    item: string,
+    currency: string,
+    tag: string,
+    cost: number
+  ) {
+    const { id } = await User.findByEmail(email);
+    console.log(id);
 
     const { rows } = await pool.query(
       `UPDATE ${this.table} 
@@ -65,11 +72,9 @@ class Outgoings {
   }
 
   static async getRecordsByUser(email: string, page: number) {
-
-    const { id } = await User.findByEmail(email)
-    console.log(id)
-    const offset = (page - 1) * 10
-
+    const { id } = await User.findByEmail(email);
+    console.log(id);
+    const offset = (page - 1) * 10;
 
     const { rows } = await pool.query(
       `SELECT * FROM ${this.table} WHERE user_id = $1 LIMIT 10 OFFSET ${offset};`,
@@ -87,9 +92,10 @@ class Outgoings {
       	GROUP BY tag
       	ORDER BY count DESC;
 
-    `, [userId]
-    )
-    return toCamelCase(rows)
+    `,
+      [userId]
+    );
+    return toCamelCase(rows);
   }
 
   static async sumRecordsByUser(userId: number) {
@@ -97,13 +103,11 @@ class Outgoings {
       `	SELECT SUM(cost) AS total_outgoings        
 	      FROM fixed_outgoings_monthly
         WHERE user_id = $1;
-      `, [userId]
-    )
-    return toCamelCase(rows)[0]
+      `,
+      [userId]
+    );
+    return toCamelCase(rows)[0];
   }
-
-  
-
 }
 
 export { Outgoings };

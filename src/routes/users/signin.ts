@@ -46,7 +46,7 @@ router.post(
     //store in session object
     req.session = { jwt: userJwt };
     //delete later
-    console.log('\x1b[36m%s\x1b[0m',req.session);
+    console.log('\x1b[36m%s\x1b[0m', req.session);
 
     res.status(200).send(existingUser);
   }
