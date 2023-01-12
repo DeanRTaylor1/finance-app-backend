@@ -25,12 +25,7 @@ import { deleteAccountRouter } from './routes/users/delete';
 
 const app = express();
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // ingress nginx will be sending requests via proxy default behaviour is to reject
 // app.set('trust proxy', true);
