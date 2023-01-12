@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import pool from './pool';
 
+
+const PORT = process.env.port || 3001
+
 const start = async () => {
   console.log('\x1b[34m%s\x1b[0m', 'Starting up...');
 
@@ -36,8 +39,8 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
-  app.listen(process.env.PORT, () => {
-    console.log('\x1b[34m%s\x1b[0m', `Listening on port ${process.env.PORT}`);
+  app.listen(PORT, () => {
+    console.log('\x1b[34m%s\x1b[0m', `Listening on port ${PORT}`);
   });
 };
 
