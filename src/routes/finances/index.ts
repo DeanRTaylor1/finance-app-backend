@@ -11,9 +11,11 @@ router.post(
     const { email } = req.body;
 
     const userData = await User.findByEmail(email);
-
+    console.log(userData);
     //remove the postgres id from the return as it is unused
     delete userData.id;
+    delete userData.authStrategy;
+    delete userData.authId;
 
     res.status(200).send(userData);
   }

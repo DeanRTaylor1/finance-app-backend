@@ -14,15 +14,15 @@ router.post(
     if (!currency || !email || !tag || !cost || !item) {
       throw new BadRequestError('Missing Attributes');
     }
-    const existingItem = await Outgoings.findExistingItemByName(item);
+    //const existingItem = await Outgoings.findExistingItemByName(item);
 
-    if (existingItem) {
-      console.log(!!existingItem);
+    //if (existingItem) {
+      //console.log(!!existingItem);
 
-      throw new BadRequestError(
-        'Cannot create duplicate item please change the name'
-      );
-    }
+      //throw new BadRequestError(
+        //'Cannot create duplicate item please change the name'
+      //);
+    //}
     const { id } = await User.findByEmail(email);
 
     const addedItem = await Outgoings.insertNewRecord(

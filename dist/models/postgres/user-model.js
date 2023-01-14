@@ -39,6 +39,13 @@ class User {
             return (0, to_camel_case_1.default)(rows)[0];
         });
     }
+    static insertNewUserOAuth(email, username, auth_strategy, auth_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rows } = yield pool_1.default.query(`INSERT INTO users (email, username, auth_strategy, auth_id) VALUES ($1, $2, $3, $4) RETURNING *;`, [email, username, auth_strategy, auth_id]);
+            console.log('\x1b[32m%s\x1b[0m', rows);
+            return (0, to_camel_case_1.default)(rows)[0];
+        });
+    }
     static count() {
         return __awaiter(this, void 0, void 0, function* () {
             const { rows } = yield pool_1.default.query(`SELECT COUNT(*) FROM users`);

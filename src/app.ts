@@ -22,10 +22,17 @@ import { deleteExpenseRouter } from './routes/finances/expenses/delete';
 import { expenseCountRouter } from './routes/finances/expenses/count';
 import { dashboardDataValuesRouter } from './routes/finances/outgoings/dashboard';
 import { deleteAccountRouter } from './routes/users/delete';
-
+import { googleRouter } from './routes/users/googleAuth';
+import passport from 'passport';
+require('./services/passportGoogleAuth');
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+);
 
 // ingress nginx will be sending requests via proxy default behaviour is to reject
 // app.set('trust proxy', true);
@@ -40,6 +47,8 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
@@ -58,6 +67,7 @@ app.use(deleteExpenseRouter);
 app.use(expenseCountRouter);
 app.use(dashboardDataValuesRouter);
 app.use(deleteAccountRouter);
+app.use(googleRouter);
 
 //not found 404
 app.all('*', async (req, res) => {

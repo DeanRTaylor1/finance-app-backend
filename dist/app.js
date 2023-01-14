@@ -60,10 +60,13 @@ const delete_2 = require("./routes/finances/expenses/delete");
 const count_1 = require("./routes/finances/expenses/count");
 const dashboard_1 = require("./routes/finances/outgoings/dashboard");
 const delete_3 = require("./routes/users/delete");
+const googleAuth_1 = require("./routes/users/googleAuth");
+const passport_1 = __importDefault(require("passport"));
+require('./services/passportGoogleAuth');
 const app = (0, express_1.default)();
 exports.app = app;
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000'],
     credentials: true,
 }));
 // ingress nginx will be sending requests via proxy default behaviour is to reject
@@ -74,6 +77,8 @@ app.use((0, cookie_session_1.default)({
     signed: false,
     secure: false, //require https if we are in prod
 }));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 app.use(current_user_1.currentUserRouter);
 app.use(signin_1.signinRouter);
 app.use(signout_1.signoutRouter);
@@ -92,6 +97,7 @@ app.use(delete_2.deleteExpenseRouter);
 app.use(count_1.expenseCountRouter);
 app.use(dashboard_1.dashboardDataValuesRouter);
 app.use(delete_3.deleteAccountRouter);
+app.use(googleAuth_1.googleRouter);
 //not found 404
 app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     throw new common_1.NotFoundError();

@@ -25,6 +25,19 @@ class User {
     console.log('\x1b[32m%s\x1b[0m', rows);
     return toCamelCase(rows)[0];
   }
+  static async insertNewUserOAuth(
+    email: string,
+    username: string,
+    auth_strategy: string,
+    auth_id: string
+  ) {
+    const { rows } = await pool.query(
+      `INSERT INTO users (email, username, auth_strategy, auth_id) VALUES ($1, $2, $3, $4) RETURNING *;`,
+      [email, username, auth_strategy, auth_id]
+    );
+    console.log('\x1b[32m%s\x1b[0m', rows);
+    return toCamelCase(rows)[0];
+  }
   static async count() {
     const { rows } = await pool.query(`SELECT COUNT(*) FROM users`);
     return toCamelCase(rows)[0];

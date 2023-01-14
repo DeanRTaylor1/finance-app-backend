@@ -24,11 +24,13 @@ router.post('/api/finances/outgoings', common_1.requireAuth, (req, res) => __awa
     if (!currency || !email || !tag || !cost || !item) {
         throw new common_1.BadRequestError('Missing Attributes');
     }
-    const existingItem = yield outgoings_model_1.Outgoings.findExistingItemByName(item);
-    if (existingItem) {
-        console.log(!!existingItem);
-        throw new common_1.BadRequestError('Cannot create duplicate item please change the name');
-    }
+    //const existingItem = await Outgoings.findExistingItemByName(item);
+    //if (existingItem) {
+    //console.log(!!existingItem);
+    //throw new BadRequestError(
+    //'Cannot create duplicate item please change the name'
+    //);
+    //}
     const { id } = yield user_model_1.User.findByEmail(email);
     const addedItem = yield outgoings_model_1.Outgoings.insertNewRecord(item, currency, id, tag, cost);
     //remove the postgres id from the return as it is unused

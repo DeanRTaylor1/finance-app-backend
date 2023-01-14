@@ -21,7 +21,10 @@ exports.indexFinancesRouter = router;
 router.post('/api/finances', common_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
     const userData = yield user_model_1.User.findByEmail(email);
+    console.log(userData);
     //remove the postgres id from the return as it is unused
     delete userData.id;
+    delete userData.authStrategy;
+    delete userData.authId;
     res.status(200).send(userData);
 }));

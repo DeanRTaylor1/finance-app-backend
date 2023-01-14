@@ -20,14 +20,16 @@ router.delete(
     } catch (err) {
       throw new BadRequestError('Something went wrong');
     }
-
-    try {
-      const mongooseDeletedItem = await mongooseUser.deleteOne({
-        email: email,
-      });
-      console.log(mongooseDeletedItem);
-    } catch (err) {
-      throw new BadRequestError('Something Went Wrong');
+    const user = await mongooseUser.findOne({ email });
+    if (user) {
+      try {
+        const mongooseDeletedItem = await mongooseUser.deleteOne({
+          email: email,
+        });
+        console.log(mongooseDeletedItem);
+      } catch (err) {
+        throw new BadRequestError('Something Went Wrong');
+      }
     }
 
     req.session = null;

@@ -31,14 +31,17 @@ router.delete('/api/users', common_1.requireAuth, (req, res) => __awaiter(void 0
     catch (err) {
         throw new common_1.BadRequestError('Something went wrong');
     }
-    try {
-        const mongooseDeletedItem = yield User_1.User.deleteOne({
-            email: email,
-        });
-        console.log(mongooseDeletedItem);
-    }
-    catch (err) {
-        throw new common_1.BadRequestError('Something Went Wrong');
+    const user = yield User_1.User.findOne({ email });
+    if (user) {
+        try {
+            const mongooseDeletedItem = yield User_1.User.deleteOne({
+                email: email,
+            });
+            console.log(mongooseDeletedItem);
+        }
+        catch (err) {
+            throw new common_1.BadRequestError('Something Went Wrong');
+        }
     }
     req.session = null;
     res.status(200).send([{ message: 'Account Deleted Successfully' }]);
