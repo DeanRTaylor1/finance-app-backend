@@ -24,7 +24,9 @@ import { dashboardDataValuesRouter } from './routes/finances/outgoings/dashboard
 import { deleteAccountRouter } from './routes/users/delete';
 import { googleRouter } from './routes/users/googleAuth';
 import passport from 'passport';
-require('./services/passportGoogleAuth');
+import { facebookRouter } from './routes/users/facebook-auth';
+import { githubRouter } from './routes/users/github-auth';
+require('./services/passportOAuth');
 const app = express();
 
 app.use(
@@ -68,6 +70,8 @@ app.use(expenseCountRouter);
 app.use(dashboardDataValuesRouter);
 app.use(deleteAccountRouter);
 app.use(googleRouter);
+app.use(facebookRouter);
+app.use(githubRouter);
 
 //not found 404
 app.all('*', async (req, res) => {
