@@ -26,10 +26,12 @@ class Expenses {
             return parsedRows;
         });
     }
-    static findAllByUserId(userId) {
+    static findAllByUserId(userId, page) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield pool_1.default.query(`SELECT * FROM ${this.table} WHERE email = $1;`, [userId]);
-            return (0, to_camel_case_1.default)(rows)[0];
+            const offset = (page - 1) * 10;
+            const { rows } = yield pool_1.default.query(`SELECT * FROM ${this.table} WHERE user_id = $1
+       LIMIT 10 OFFSET ${offset};`, [userId]);
+            return (0, to_camel_case_1.default)(rows);
         });
     }
     static findItemByName(item, userId) {

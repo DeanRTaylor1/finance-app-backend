@@ -26,7 +26,7 @@ router.get('/api/finances/expenses', common_1.requireAuth, (req, res) => __await
     }
     console.log(email, page);
     const { id } = yield user_model_1.User.findByEmail(email);
-    const allItems = yield expenses_model_1.Expenses.findAll(id, +page);
+    const allItems = yield expenses_model_1.Expenses.findAllByUserId(id, +page);
     console.log(allItems);
     res.status(200).send(allItems);
 }));

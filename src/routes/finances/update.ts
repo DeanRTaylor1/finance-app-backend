@@ -22,9 +22,10 @@ router.post(
   async (req: Request, res: Response) => {
     //   'update user profile here'
     //
-    const { email, username, monthlySalary, currency, phone, savingsTarget } =
+    const { email, username, monthlySalary, currency, phone, savingsTarget, savingsRate, currentSavings } =
       req.body;
 
+    console.log(currentSavings)
     const response = await User.updateExistingUser({
       email,
       username,
@@ -32,6 +33,8 @@ router.post(
       currency,
       phone,
       savingsTarget,
+      savingsRate,
+      currentSavings
     });
 
     res.status(201).send({

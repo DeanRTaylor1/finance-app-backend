@@ -23,7 +23,7 @@ router.get(
       throw new BadRequestError('Missing Parameters');
     }
 
-    const { id, monthlySalary, savingsTarget, currency } =
+    const { id, monthlySalary, savingsTarget, currency, savingsRate, currentSavings } =
       await User.findByEmail(email);
     console.log(id, monthlySalary, savingsTarget);
     const outgoingsSum = await JoinQueries.getTotalCostByTagsByUserid(+id);
@@ -46,6 +46,8 @@ router.get(
         savingsTarget,
         currency,
         expenses,
+        savingsRate,
+        currentSavings
       });
   }
 );

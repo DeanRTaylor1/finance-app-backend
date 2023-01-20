@@ -8,6 +8,8 @@ type UserProps = {
   currency: string;
   phone: string;
   savingsTarget: number;
+  savingsRate?: number;
+  currentSavings?: number
 };
 
 type OutgoingRecord = {

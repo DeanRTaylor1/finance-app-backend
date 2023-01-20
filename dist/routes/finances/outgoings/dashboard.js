@@ -30,7 +30,7 @@ router.get('/api/finances/outgoings/dashboard', common_1.requireAuth, (req, res)
         typeof enddate !== 'string') {
         throw new common_1.BadRequestError('Missing Parameters');
     }
-    const { id, monthlySalary, savingsTarget, currency } = yield user_model_1.User.findByEmail(email);
+    const { id, monthlySalary, savingsTarget, currency, savingsRate, currentSavings } = yield user_model_1.User.findByEmail(email);
     console.log(id, monthlySalary, savingsTarget);
     const outgoingsSum = yield join_queries_1.JoinQueries.getTotalCostByTagsByUserid(+id);
     const totalOutgoings = yield outgoings_model_1.Outgoings.sumRecordsByUser(+id);
@@ -47,5 +47,7 @@ router.get('/api/finances/outgoings/dashboard', common_1.requireAuth, (req, res)
         savingsTarget,
         currency,
         expenses,
+        savingsRate,
+        currentSavings
     });
 }));

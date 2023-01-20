@@ -30,7 +30,8 @@ router.post('/api/finances/user', common_1.requireAuth, (0, express_validator_1.
     .withMessage('Savings target must be a number'), common_1.validateRequest, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //   'update user profile here'
     //
-    const { email, username, monthlySalary, currency, phone, savingsTarget } = req.body;
+    const { email, username, monthlySalary, currency, phone, savingsTarget, savingsRate, currentSavings } = req.body;
+    console.log(currentSavings);
     const response = yield user_model_1.User.updateExistingUser({
         email,
         username,
@@ -38,6 +39,8 @@ router.post('/api/finances/user', common_1.requireAuth, (0, express_validator_1.
         currency,
         phone,
         savingsTarget,
+        savingsRate,
+        currentSavings
     });
     res.status(201).send({
         email: response.email,

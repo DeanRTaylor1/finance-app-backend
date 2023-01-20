@@ -15,12 +15,14 @@ class Expenses {
     const parsedRows = toCamelCase(rows);
     return parsedRows;
   }
-  static async findAllByUserId(userId: number) {
+  static async findAllByUserId(userId: number, page: number) {
+    const offset = (page - 1) * 10
     const { rows } = await pool.query(
-      `SELECT * FROM ${this.table} WHERE email = $1;`,
+      `SELECT * FROM ${this.table} WHERE user_id = $1
+       LIMIT 10 OFFSET ${offset};`,
       [userId]
     );
-    return toCamelCase(rows)[0];
+    return toCamelCase(rows);
   }
   static async findItemByName(item: string, userId: number) {
     const { rows } = await pool.query(

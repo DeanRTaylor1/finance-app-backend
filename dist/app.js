@@ -62,7 +62,9 @@ const dashboard_1 = require("./routes/finances/outgoings/dashboard");
 const delete_3 = require("./routes/users/delete");
 const googleAuth_1 = require("./routes/users/googleAuth");
 const passport_1 = __importDefault(require("passport"));
-require('./services/passportGoogleAuth');
+const facebook_auth_1 = require("./routes/users/facebook-auth");
+const github_auth_1 = require("./routes/users/github-auth");
+require('./services/passportOAuth');
 const app = (0, express_1.default)();
 exports.app = app;
 app.use((0, cors_1.default)({
@@ -98,6 +100,8 @@ app.use(count_1.expenseCountRouter);
 app.use(dashboard_1.dashboardDataValuesRouter);
 app.use(delete_3.deleteAccountRouter);
 app.use(googleAuth_1.googleRouter);
+app.use(facebook_auth_1.facebookRouter);
+app.use(github_auth_1.githubRouter);
 //not found 404
 app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     throw new common_1.NotFoundError();

@@ -17,7 +17,7 @@ router.get(
 
     console.log(email, page);
     const { id } = await User.findByEmail(email);
-    const allItems = await Expenses.findAll(id, +page);
+    const allItems = await Expenses.findAllByUserId(id, +page);
 
     console.log(allItems);
 

@@ -54,18 +54,22 @@ class User {
     }
     static updateExistingUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield pool_1.default.query(`UPDATE users 
+            const { rows } = yield pool_1.default.query(`UPDATE ${this.table} 
        SET monthly_salary = $1,
        currency = $2,
        phone = $3,
        savings_target = $4,
-       updated_at = current_timestamp
-       WHERE email = $5
+       updated_at = current_timestamp,
+       savings_rate = $5,
+       current_savings = $6
+       WHERE email = $7
        RETURNING *;`, [
                 user.monthlySalary,
                 user.currency,
                 user.phone,
                 user.savingsTarget,
+                user.savingsRate,
+                user.currentSavings,
                 user.email,
             ]);
             return (0, to_camel_case_1.default)(rows)[0];
