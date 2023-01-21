@@ -1,5 +1,6 @@
 import passport from 'passport';
 import express, { Request, Response } from 'express';
+
 const router = express.Router();
 import jwt from 'jsonwebtoken';
 
@@ -15,7 +16,7 @@ router.get(
   '/api/auth/facebook/callback',
   passport.authenticate('facebook', {
     successReturnToOrRedirect: '/api/facebookconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/facebookfail',
   }),
   (req, res) => {
     console.log('Req:' + req);
@@ -38,5 +39,7 @@ router.get('/api/facebookconfirm', (req: Request, res: Response) => {
 
 router.get('/api/facebookfail', (req: Request, res: Response) => {
   console.log('Auth does not match');
+
+  res.status(400).redirect('http://localhost:3000/auth/error');
 });
 export { router as facebookRouter };

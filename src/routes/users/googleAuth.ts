@@ -16,7 +16,7 @@ router.get(
   '/api/auth/google/callback',
   passport.authenticate('google', {
     successReturnToOrRedirect: '/api/googleconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/googlefail',
   }),
   (req, res) => {
     console.log('Req:' + req);
@@ -39,5 +39,7 @@ router.get('/api/googleconfirm', (req: Request, res: Response) => {
 
 router.get('/api/googlefail', (req: Request, res: Response) => {
   console.log('Auth does not match');
+
+  res.status(400).redirect('http://localhost:3000/auth/error');
 });
 export { router as googleRouter };

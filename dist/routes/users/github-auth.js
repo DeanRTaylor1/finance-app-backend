@@ -14,7 +14,7 @@ const errorLoginUrl = 'http://localhost:3000/auth/signin';
 router.get('/api/login/github', passport_1.default.authenticate('github'));
 router.get('/api/auth/github/callback', passport_1.default.authenticate('github', {
     successReturnToOrRedirect: '/api/githubconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/githubfail',
 }), (req, res) => {
     console.log('Req:' + req);
     res.send('Thank you for signing in!');
@@ -32,4 +32,5 @@ router.get('/api/githubconfirm', (req, res) => {
 });
 router.get('/api/githubfail', (req, res) => {
     console.log('Auth does not match');
+    res.status(400).redirect('http://localhost:3000/auth/error');
 });

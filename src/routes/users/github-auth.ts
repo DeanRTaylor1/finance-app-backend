@@ -12,7 +12,7 @@ router.get(
   '/api/auth/github/callback',
   passport.authenticate('github', {
     successReturnToOrRedirect: '/api/githubconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/githubfail',
   }),
   (req, res) => {
     console.log('Req:' + req);
@@ -35,5 +35,7 @@ router.get('/api/githubconfirm', (req: Request, res: Response) => {
 
 router.get('/api/githubfail', (req: Request, res: Response) => {
   console.log('Auth does not match');
+
+  res.status(400).redirect('http://localhost:3000/auth/error');
 });
 export { router as githubRouter };

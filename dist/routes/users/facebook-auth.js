@@ -14,7 +14,7 @@ const errorLoginUrl = 'http://localhost:3000/auth/signin';
 router.get('/api/login/facebook', passport_1.default.authenticate('facebook', { scope: ['email'] }));
 router.get('/api/auth/facebook/callback', passport_1.default.authenticate('facebook', {
     successReturnToOrRedirect: '/api/facebookconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/facebookfail',
 }), (req, res) => {
     console.log('Req:' + req);
     res.send('Thank you for signing in!');
@@ -32,4 +32,5 @@ router.get('/api/facebookconfirm', (req, res) => {
 });
 router.get('/api/facebookfail', (req, res) => {
     console.log('Auth does not match');
+    res.status(400).redirect('http://localhost:3000/auth/error');
 });

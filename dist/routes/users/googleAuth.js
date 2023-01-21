@@ -14,7 +14,7 @@ const errorLoginUrl = 'http://localhost:3000/auth/signin';
 router.get('/api/login/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/api/auth/google/callback', passport_1.default.authenticate('google', {
     successReturnToOrRedirect: '/api/googleconfirm',
-    failureRedirect: errorLoginUrl,
+    failureRedirect: '/api/googlefail',
 }), (req, res) => {
     console.log('Req:' + req);
     res.send('Thank you for signing in!');
@@ -32,4 +32,5 @@ router.get('/api/googleconfirm', (req, res) => {
 });
 router.get('/api/googlefail', (req, res) => {
     console.log('Auth does not match');
+    res.status(400).redirect('http://localhost:3000/auth/error');
 });
