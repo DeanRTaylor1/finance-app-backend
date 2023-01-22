@@ -2,12 +2,14 @@ import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '../../common';
 import { User } from '../../models/postgres/user-model';
 import { body } from 'express-validator';
+import { apiLimiter } from '../../services/rate-limiter';
 
 const router = express.Router();
 
 router.post(
   '/api/finances/user',
   requireAuth,
+  apiLimiter,
   body('monthlySalary')
     .trim()
     .escape()

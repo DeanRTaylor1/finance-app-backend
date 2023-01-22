@@ -1,28 +1,51 @@
 import express, { Request, Response } from 'express';
-import { BadRequestError, currentUser, requireAuth } from '../../../common';
+import { body } from 'express-validator';
+import { BadRequestError,  NotAuthorizedError,  requireAuth, validateRequest } from '../../../common';
 import { Outgoings } from '../../../models/postgres/outgoings-model';
 import { User } from '../../../models/postgres/user-model';
+import { apiLimiter } from '../../../services/rate-limiter';
 
 const router = express.Router();
 
 router.post(
   '/api/finances/outgoings',
   requireAuth,
+  apiLimiter,
+  body('currency')
+    .trim()
+    .escape()
+    .isAlpha()
+    .withMessage('Invalid currency!'),
+  body('item')
+    .trim()
+    .escape()
+    .isAlphanumeric()
+    .withMessage('Invalid Item name'),
+  body('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email!'),
+  body('tag')
+    .trim()
+    .escape()
+    .isAlpha()
+    .withMessage('Invalid Tag!'),
+  body('cost')
+    .trim()
+    .escape()
+    .isNumeric()
+    .withMessage('Cost must be a number!'),
+  validateRequest,
   async (req: Request, res: Response) => {
     const { item, currency, email, tag, cost } = req.body;
 
     if (!currency || !email || !tag || !cost || !item) {
       throw new BadRequestError('Missing Attributes');
     }
-    //const existingItem = await Outgoings.findExistingItemByName(item);
-
-    //if (existingItem) {
-      //console.log(!!existingItem);
-
-      //throw new BadRequestError(
-        //'Cannot create duplicate item please change the name'
-      //);
-    //}
+     if(email !== req.currentUser!.email){
+      throw new NotAuthorizedError(); 
+    }
     const { id } = await User.findByEmail(email);
 
     const addedItem = await Outgoings.insertNewRecord(

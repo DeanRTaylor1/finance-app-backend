@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dashboardDataValuesRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const express_validator_1 = require("express-validator");
 const common_1 = require("../../../common");
 const expenses_model_1 = require("../../../models/postgres/expenses-model");
 const join_queries_1 = require("../../../models/postgres/join-queries");
@@ -21,9 +22,16 @@ const outgoings_model_1 = require("../../../models/postgres/outgoings-model");
 const user_model_1 = require("../../../models/postgres/user-model");
 const router = express_1.default.Router();
 exports.dashboardDataValuesRouter = router;
-router.get('/api/finances/outgoings/dashboard', common_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/api/finances/outgoings/dashboard', common_1.requireAuth, (0, express_validator_1.header)('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email'), (0, express_validator_1.header)('startdate')
+    .trim()
+    .escape(), (0, express_validator_1.header)('enddate')
+    .trim()
+    .escape(), common_1.validateRequest, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, startdate, enddate } = req.headers;
-    console.log(startdate, enddate);
     if (!email ||
         typeof email !== 'string' ||
         typeof startdate !== 'string' ||

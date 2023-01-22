@@ -17,9 +17,10 @@ const express_1 = __importDefault(require("express"));
 const common_1 = require("../../common");
 const user_model_1 = require("../../models/postgres/user-model");
 const express_validator_1 = require("express-validator");
+const rate_limiter_1 = require("../../services/rate-limiter");
 const router = express_1.default.Router();
 exports.updateUserRouter = router;
-router.post('/api/finances/user', common_1.requireAuth, (0, express_validator_1.body)('monthlySalary')
+router.post('/api/finances/user', common_1.requireAuth, rate_limiter_1.apiLimiter, (0, express_validator_1.body)('monthlySalary')
     .trim()
     .escape()
     .isNumeric()

@@ -14,11 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteExpenseRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const express_validator_1 = require("express-validator");
 const common_1 = require("../../../common");
 const expenses_model_1 = require("../../../models/postgres/expenses-model");
+const check_userid_1 = require("../../../services/check-userid");
 const router = express_1.default.Router();
 exports.deleteExpenseRouter = router;
-router.delete('/api/finances/expenses', common_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/api/finances/expenses', common_1.requireAuth, (0, express_validator_1.header)('item')
+    .trim()
+    .escape(), (0, express_validator_1.header)('userid')
+    .trim()
+    .escape(), common_1.validateRequest, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userid, item, datespent } = req.headers;
     if (!userid || !item || !datespent) {
         throw new common_1.BadRequestError('Missing Attributes');
@@ -28,6 +34,10 @@ router.delete('/api/finances/expenses', common_1.requireAuth, (req, res) => __aw
         typeof item !== 'string' ||
         typeof datespent !== 'string') {
         throw new common_1.BadRequestError('Missing Paramaters');
+    }
+    const validUser = yield (0, check_userid_1.checkUserId)(req.currentUser.email, +userid);
+    if (!validUser) {
+        throw new common_1.BadRequestError('Something went wrong');
     }
     const response = yield expenses_model_1.Expenses.deleteExpenseRecord(item, +userid, datespent);
     res.status(200).send(response);

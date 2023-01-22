@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import pool from './pool';
+import cron from 'node-cron';
+import { fetchStocks } from './services/stocks';
 
 const PORT = process.env.port || 3001;
 
@@ -36,6 +38,13 @@ const start = async () => {
       user: process.env.RDS_USER,
       password: process.env.RDS_PASSWORD,
     });
+    
+    fetchStocks();
+    //refetch stock data every midnight
+    cron.schedule('0 0 0 * * *', () => {
+    console.log('Cron running')
+    fetchStocks();    
+    })
 
     console.log('\x1b[34m%s\x1b[0m', 'Connected to Postgres');
   } catch (err) {

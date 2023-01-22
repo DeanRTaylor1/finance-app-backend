@@ -52,7 +52,6 @@ dotenv.config();
 const cors_1 = __importDefault(require("cors"));
 const new_1 = require("./routes/finances/outgoings/new");
 const delete_1 = require("./routes/finances/outgoings/delete");
-const update_2 = require("./routes/finances/outgoings/update");
 const outgoings_1 = require("./routes/finances/outgoings");
 const expenses_1 = require("./routes/finances/expenses");
 const new_2 = require("./routes/finances/expenses/new");
@@ -64,6 +63,7 @@ const googleAuth_1 = require("./routes/users/googleAuth");
 const passport_1 = __importDefault(require("passport"));
 const facebook_auth_1 = require("./routes/users/facebook-auth");
 const github_auth_1 = require("./routes/users/github-auth");
+const getStocks_1 = require("./routes/finances/stocks/getStocks");
 require('./services/passportOAuth');
 const app = (0, express_1.default)();
 exports.app = app;
@@ -79,6 +79,7 @@ app.use((0, cookie_session_1.default)({
     signed: false,
     secure: false, //require https if we are in prod
 }));
+//stockHandler('VOO');
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(current_user_1.currentUserRouter);
@@ -91,7 +92,7 @@ app.use(finances_1.indexFinancesRouter);
 app.use(update_1.updateUserRouter);
 app.use(new_1.outgoingsNewRouter);
 app.use(delete_1.deleteOutgoingRouter);
-app.use(update_2.updateDutgoingRouter);
+//app.use(updateDutgoingRouter);
 app.use(outgoings_1.getOutgoingsRouter);
 app.use(expenses_1.expensesIndexRouter);
 app.use(new_2.expensesNewRouter);
@@ -102,6 +103,7 @@ app.use(delete_3.deleteAccountRouter);
 app.use(googleAuth_1.googleRouter);
 app.use(facebook_auth_1.facebookRouter);
 app.use(github_auth_1.githubRouter);
+app.use(getStocks_1.getStocksRouter);
 //not found 404
 app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     throw new common_1.NotFoundError();

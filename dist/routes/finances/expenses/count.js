@@ -14,13 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expenseCountRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const express_validator_1 = require("express-validator");
 const common_1 = require("../../../common");
 const require_auth_1 = require("../../../common/middlewares/require-auth");
 const expenses_model_1 = require("../../../models/postgres/expenses-model");
 const user_model_1 = require("../../../models/postgres/user-model");
 const router = express_1.default.Router();
 exports.expenseCountRouter = router;
-router.get('/api/finances/expenses/count', require_auth_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/api/finances/expenses/count', require_auth_1.requireAuth, (0, express_validator_1.header)('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email'), common_1.validateRequest, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
     if (!email || typeof email !== 'string') {
         throw new common_1.BadRequestError('Missing Paramaters');

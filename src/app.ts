@@ -26,7 +26,12 @@ import { googleRouter } from './routes/users/googleAuth';
 import passport from 'passport';
 import { facebookRouter } from './routes/users/facebook-auth';
 import { githubRouter } from './routes/users/github-auth';
+import { fetchStocks } from './services/stocks';
+import { getStocksRouter } from './routes/finances/stocks/getStocks';
 require('./services/passportOAuth');
+
+
+
 const app = express();
 
 app.use(
@@ -48,7 +53,7 @@ app.use(
     secure: false, //require https if we are in prod
   })
 );
-
+//stockHandler('VOO');
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(currentUserRouter);
@@ -61,7 +66,7 @@ app.use(indexFinancesRouter);
 app.use(updateUserRouter);
 app.use(outgoingsNewRouter);
 app.use(deleteOutgoingRouter);
-app.use(updateDutgoingRouter);
+//app.use(updateDutgoingRouter);
 app.use(getOutgoingsRouter);
 app.use(expensesIndexRouter);
 app.use(expensesNewRouter);
@@ -72,6 +77,7 @@ app.use(deleteAccountRouter);
 app.use(googleRouter);
 app.use(facebookRouter);
 app.use(githubRouter);
+app.use(getStocksRouter)
 
 //not found 404
 app.all('*', async (req, res) => {

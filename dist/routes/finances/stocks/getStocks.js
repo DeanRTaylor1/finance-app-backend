@@ -12,20 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDutgoingRouter = void 0;
+exports.getStocksRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const common_1 = require("../../../common");
-const outgoings_model_1 = require("../../../models/postgres/outgoings-model");
-const rate_limiter_1 = require("../../../services/rate-limiter");
+const require_auth_1 = require("../../../common/middlewares/require-auth");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const router = express_1.default.Router();
-exports.updateDutgoingRouter = router;
-//TODO add update router
-router.put('/api/finances/outgoings', common_1.requireAuth, rate_limiter_1.apiLimiter, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, item, currency, userId, tag, cost } = req.body;
-    const existingItem = yield outgoings_model_1.Outgoings.updateExistingRecord(email, item, currency, tag, cost);
-    console.log(existingItem);
-    if (!existingItem) {
-        throw new common_1.BadRequestError('Item does not exist');
-    }
-    res.status(200).send([existingItem]);
+exports.getStocksRouter = router;
+router.get('/api/finances/stocks/:code', require_auth_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { code } = req.params;
+    const data = fs_1.default.readFileSync(path_1.default.resolve(__dirname, `../../../services/stock-data/${code}.txt`), 'utf-8');
+    //console.log(data)
+    res.status(200).send(JSON.parse(data));
 }));

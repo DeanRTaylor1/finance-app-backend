@@ -14,23 +14,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.outgoingsNewRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const express_validator_1 = require("express-validator");
 const common_1 = require("../../../common");
 const outgoings_model_1 = require("../../../models/postgres/outgoings-model");
 const user_model_1 = require("../../../models/postgres/user-model");
+const rate_limiter_1 = require("../../../services/rate-limiter");
 const router = express_1.default.Router();
 exports.outgoingsNewRouter = router;
-router.post('/api/finances/outgoings', common_1.requireAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/api/finances/outgoings', common_1.requireAuth, rate_limiter_1.apiLimiter, (0, express_validator_1.body)('currency')
+    .trim()
+    .escape()
+    .isAlpha()
+    .withMessage('Invalid currency!'), (0, express_validator_1.body)('item')
+    .trim()
+    .escape()
+    .isAlphanumeric()
+    .withMessage('Invalid Item name'), (0, express_validator_1.body)('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email!'), (0, express_validator_1.body)('tag')
+    .trim()
+    .escape()
+    .isAlpha()
+    .withMessage('Invalid Tag!'), (0, express_validator_1.body)('cost')
+    .trim()
+    .escape()
+    .isNumeric()
+    .withMessage('Cost must be a number!'), common_1.validateRequest, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { item, currency, email, tag, cost } = req.body;
     if (!currency || !email || !tag || !cost || !item) {
         throw new common_1.BadRequestError('Missing Attributes');
     }
-    //const existingItem = await Outgoings.findExistingItemByName(item);
-    //if (existingItem) {
-    //console.log(!!existingItem);
-    //throw new BadRequestError(
-    //'Cannot create duplicate item please change the name'
-    //);
-    //}
+    if (email !== req.currentUser.email) {
+        throw new common_1.NotAuthorizedError();
+    }
     const { id } = yield user_model_1.User.findByEmail(email);
     const addedItem = yield outgoings_model_1.Outgoings.insertNewRecord(item, currency, id, tag, cost);
     //remove the postgres id from the return as it is unused

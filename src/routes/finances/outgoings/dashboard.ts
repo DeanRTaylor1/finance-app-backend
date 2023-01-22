@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import { BadRequestError, requireAuth } from '../../../common';
+import { header } from 'express-validator';
+import { BadRequestError, requireAuth, validateRequest } from '../../../common';
 import { Expenses } from '../../../models/postgres/expenses-model';
 import { JoinQueries } from '../../../models/postgres/join-queries';
 import { Outgoings } from '../../../models/postgres/outgoings-model';
@@ -10,9 +11,20 @@ const router = express.Router();
 router.get(
   '/api/finances/outgoings/dashboard',
   requireAuth,
+  header('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email'),
+  header('startdate')
+    .trim()
+    .escape(),
+  header('enddate')
+    .trim()
+    .escape(),
+  validateRequest,
   async (req: Request, res: Response) => {
     const { email, startdate, enddate } = req.headers;
-    console.log(startdate, enddate);
 
     if (
       !email ||

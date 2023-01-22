@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
-import { BadRequestError } from '../../../common';
+import { header } from 'express-validator';
+import { BadRequestError, validateRequest } from '../../../common';
 import { requireAuth } from '../../../common/middlewares/require-auth';
 import { Expenses } from '../../../models/postgres/expenses-model';
 import { User } from '../../../models/postgres/user-model';
@@ -9,6 +10,12 @@ const router = express.Router();
 router.get(
   '/api/finances/expenses/count',
   requireAuth,
+  header('email')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Invalid email'),
+    validateRequest,
   async (req: Request, res: Response) => {
     const { email } = req.headers;
     if (!email || typeof email !== 'string') {

@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("./app");
 const pool_1 = __importDefault(require("./pool"));
+const node_cron_1 = __importDefault(require("node-cron"));
+const stocks_1 = require("./services/stocks");
 const PORT = process.env.port || 3001;
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log('\x1b[34m%s\x1b[0m', 'Starting up...');
@@ -43,6 +45,12 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
             database: 'deanrtaylorfinance',
             user: process.env.RDS_USER,
             password: process.env.RDS_PASSWORD,
+        });
+        (0, stocks_1.fetchStocks)();
+        //refetch stock data every midnight
+        node_cron_1.default.schedule('0 0 0 * * *', () => {
+            console.log('Cron running');
+            (0, stocks_1.fetchStocks)();
         });
         console.log('\x1b[34m%s\x1b[0m', 'Connected to Postgres');
     }
